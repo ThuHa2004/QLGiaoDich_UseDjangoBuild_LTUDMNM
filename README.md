@@ -74,5 +74,25 @@ DATABASES = {
 }
 ```
 
-Khởi động hệ thống 
+Khởi động hệ thống Chạy `sudo docker compose up -d`
+<img width="622" height="124" alt="image" src="https://github.com/user-attachments/assets/8d97ecfb-400c-4046-b880-f34328c79a76" />
+
+Triển khai csdl bằng django
+mở file camdo/models.py 
+Tạo db trong mariadb bằng lệnh migrate:
+`sudo docker compose exec web python manage.py migrate`
+
+<img width="1060" height="214" alt="image" src="https://github.com/user-attachments/assets/385fc415-a0fe-423b-aeab-1aab7ffa1986" />
+
+<img width="1102" height="330" alt="image" src="https://github.com/user-attachments/assets/a3dd7a85-907a-4570-8362-8ee11a64a51f" />
+Tạo tài khoản admin django:
+`sudo docker compose exec web python manage.py createsuperuser`
+<img width="1042" height="207" alt="image" src="https://github.com/user-attachments/assets/528d5088-5afd-44ca-ae2b-a3ef708d70c9" />
+
+
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/719cfc1c-accf-4c76-967e-3ffb7e976b8c" />
+
+<img width="1915" height="1078" alt="image" src="https://github.com/user-attachments/assets/2217bc9d-2688-4f2c-8b77-28be2d7d8d17" />
+
+<img width="1917" height="1061" alt="image" src="https://github.com/user-attachments/assets/a171d6c3-df91-4222-8ae9-10abefb9b914" />
 
