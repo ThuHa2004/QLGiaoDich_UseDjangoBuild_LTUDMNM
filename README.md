@@ -96,3 +96,21 @@ Tạo tài khoản admin django:
 
 <img width="1917" height="1061" alt="image" src="https://github.com/user-attachments/assets/a171d6c3-df91-4222-8ae9-10abefb9b914" />
 
+Thêm dữ liệu vào bảng trên Django: 
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/ea4f587b-3a22-4981-9a4e-ff7c43132817" />
+
+
+Sau khi thêm kiểm tra trên giao diện web phpMyadmin: 
+<img width="1029" height="209" alt="image" src="https://github.com/user-attachments/assets/291d1707-6bba-43a7-9add-6c7c94c57a21" />
+
+Giao diện web: 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/db5f4514-6843-4d21-b1e8-9ba2087c9f28" />
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/3634d1f7-b70b-4ab7-b060-a13d6d78903a" />
+
+Truy cập bằng tên miền:
+<img width="1919" height="1077" alt="image" src="https://github.com/user-attachments/assets/80d31787-7d73-45ab-afdb-cc8a7516c5ae" />
+
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/abb15737-0d0b-4780-8c1a-4715e012d3ae" />
+
+
