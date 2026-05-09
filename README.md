@@ -114,7 +114,7 @@ Bảng này dùng để lưu các loại tài sản được cầm .
 
 ---
 
-## 3. Bảng GoiLaiSuat
+## 3. Bảng Gói lãi suất 
 
 Bảng này dùng để lưu thông tin lãi suất áp dụng cho hợp đồng cầm .
 
@@ -235,6 +235,7 @@ ql_camdo_django/
 ---
 
 # 🚀 Hướng dẫn cài đặt và triển khai
+Môi trường sử dụng để xây dựng hệ thống này là Ubuntu Server. Ở bài tập trước môi trường này đã được cài đặt và cấu hình docker compose và docker. Kết nối được SSH vào Server. Trong bài này chỉ cần khởi tạo thư mục dự án và cấu hình xây dựng hệ thống web site tiệm cầm đồ.
 
 ## 1️⃣ Khởi tạo thư mục dự án
 Sử dụng hai lệnh dưới đây để tạo và truy cập vào thư mục dự án: 
