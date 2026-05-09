@@ -87,54 +87,51 @@ Sau khi phân tích nghiệp vụ, hệ thống gồm 5 bảng:
 
 ---
 
-## 1. Bảng KhachHang
+## 1. Bảng Khách hàng
 
-Bảng này dùng để lưu thông tin khách hàng.
+Bảng này dùng để lưu thông tin khách hàng cầm 
 
 ### Các trường dữ liệu
 
-- Mã khách hàng
-- Họ tên
-- Số điện thoại
-- CCCD
-- Địa chỉ
+| Tên trường | Kiểu dữ liệu | Mô tả |
+|---|---|---|
+| id | bigint(20) | Khóa chính của khách hàng |
+| hoten | varchar(100) | Họ và tên khách hàng |
+| sdt | varchar(15) | Số điện thoại |
+| cccd | varchar(20) | Số CCCD/CMND |
+| diachi | varchar(255) | Địa chỉ khách hàng |
 
 ---
 
-## 2. Bảng LoaiTaiSan
+## 2. Bảng Loại tài sản 
 
-Bảng này dùng để lưu các loại tài sản.
+Bảng này dùng để lưu các loại tài sản được cầm .
 
-Ví dụ:
-
-- Điện thoại
-- Laptop
-- Xe máy
-- Đồng hồ
-
-### Các trường dữ liệu
-
-- Mã loại tài sản
-- Tên loại tài sản
+| Tên trường | Kiểu dữ liệu | Mô tả |
+|---|---|---|
+| id | bigint(20) | Khóa chính của loại tài sản |
+| ten_loai | varchar(100) | Tên loại tài sản |
 
 ---
 
 ## 3. Bảng GoiLaiSuat
 
-Bảng này dùng để lưu thông tin lãi suất.
+Bảng này dùng để lưu thông tin lãi suất áp dụng cho hợp đồng cầm .
 
 ### Các trường dữ liệu
 
-- Mã gói lãi suất
-- Tên gói
-- Phần trăm lãi
-- Chu kỳ
+| Tên trường | Kiểu dữ liệu | Mô tả |
+|---|---|---|
+| id | bigint(20) | Khóa chính của gói lãi suất |
+| ten_goi | varchar(100) | Tên gói lãi suất |
+| phan_tram | double | Phần trăm lãi suất |
+| chu_ky | varchar(10) | Chu kỳ tính lãi |
 
 ---
 
-## 4. Bảng HopDong
+## 4. Bảng Hợp đồng
 
-Đây là bảng quan trọng nhất của hệ thống.
+Đây là bảng quan trọng nhất của hệ thống. Bảng này dùng để lưu thông tin hợp đồng cầm đồ giữa khách hàng và tiệm cầm đồ.
 
 Bảng này liên kết:
 
@@ -144,33 +141,68 @@ Bảng này liên kết:
 
 thông qua khóa ngoại.
 
-### Các trường dữ liệu
-
-- Mã hợp đồng
-- Khách hàng
-- Loại tài sản
-- Gói lãi suất
-- Chi tiết tài sản
-- Số tiền cầm
-- Ngày cầm
-- Hạn trả
-- Trạng thái
-- Nhân viên
+| Tên trường | Kiểu dữ liệu | Mô tả |
+|---|---|---|
+| id | bigint(20) | Khóa chính của hợp đồng |
+| ten_tai_san_chi_tiet | varchar(255) | Tên chi tiết tài sản cầm cố |
+| so_tien_cam | decimal(12,0) | Số tiền cầm |
+| ngay_cam | date | Ngày cầm tài sản |
+| han_tra | date | Hạn trả tiền |
+| trang_thai | varchar(20) | Trạng thái hợp đồng |
+| goi_lai_suat_id | bigint(20) | Khóa ngoại tới bảng Goi_lai_suat |
+| nhan_vien_id | int(11) | ID nhân viên xử lý hợp đồng |
+| khach_hang_id | bigint(20) | Khóa ngoại tới bảng Khach_hang |
+| loai_tai_san_id | bigint(20) | Khóa ngoại tới bảng Loai_tai_san |
 
 ---
 
-## 5.Bảng LichSuThanhToan
+## 5.Bảng Lịch sử thanh toán
 
 Bảng này dùng để lưu lịch sử thanh toán của từng hợp đồng.
 
 ### Các trường dữ liệu
 
-- Mã thanh toán
-- Hợp đồng
-- Ngày đóng
-- Số tiền
-- Loại phí
-- Ghi chú
+| Tên trường | Kiểu dữ liệu | Mô tả |
+|---|---|---|
+| id | bigint(20) | Khóa chính của lịch sử thanh toán |
+| ngay_dong | datetime(6) | Ngày giờ thanh toán |
+| so_tien | decimal(12,0) | Số tiền thanh toán |
+| loai_phi | varchar(20) | Loại phí thanh toán |
+| ghi_chu | longtext | Ghi chú |
+| hop_dong_id | bigint(20) | Khóa ngoại tới bảng Hop_dong |
+
+---
+
+## Quan hệ giữa các bảng
+
+- Một khách hàng có thể có nhiều hợp đồng
+- Một loại tài sản có thể thuộc nhiều hợp đồng
+- Một gói lãi suất có thể áp dụng cho nhiều hợp đồng
+- Một hợp đồng có thể có nhiều lần thanh toán
+  
+---
+
+# SƠ ĐỒ QUAN HỆ
+
+```text
+Khach_hang
+      |
+      | 1 - n
+      |
+Hop_dong
+  |      \
+  |       \
+  |        \
+  |         \
+  n          n
+Loai_tai_san  Goi_lai_suat
+
+Hop_dong
+    |
+    | 1 - n
+    |
+Lich_su_thanh_toan
+```
 
 ---
 
@@ -199,7 +231,8 @@ ql_camdo_django/
 ├── README.md                   # Hướng dẫn dự án
 └── requirements.txt            # Danh sách thư viện Python cần thiết
 ```
-----
+
+---
 
 # 🚀 Hướng dẫn cài đặt và triển khai
 
@@ -219,7 +252,7 @@ cd ql_camdo_django
 ## 2️⃣ Tạo file `requirements.txt`
 Lệnh tạo `sudo nano requirements.txt` sau đó gán nội dung sau vào file:
 ```txt
-Django>=4.2,<5.0
+Django
 mysqlclient
 ```
 
@@ -403,8 +436,7 @@ DATABASES = {
 }
 ```
 
-### Tạo App nghiệp vụ
-#### Tạo App `camdo`
+### Tạo App `camdo`
 ```
 sudo docker compose exec web python manage.py startapp camdo
 ```
@@ -436,7 +468,7 @@ DATABASES = {
 Migration Database giúp tạo bảng tự động và đồng bộ model với database
 
 ## 8️⃣ Tạo migration
-Chạy hai lệnh sau:
+Chạy hai lệnh sau để tạo file migration từ models.py và Apply migration vào MariaDB (Django tự tạo bảng)
 ```bash
 sudo docker compose exec web python manage.py makemigrations camdo
 
@@ -444,12 +476,14 @@ sudo docker compose exec web python manage.py migrate
 ```
 <img width="1060" height="214" alt="image" src="https://github.com/user-attachments/assets/6c1fd405-2dd7-4a75-bb6d-85c822c84ea1" />
 
+### Vào phpMyAdmin kiểm tra
+PhpMyadmin có vai trò xem bảng dữ liệu, kiểm tra khóa ngoại, kiểm tra dữ liệu thật trong database. Mở PhpAdmin tại cổng `http://192.168.100.2:8089` đăng nhập bằng tài khoản đã tạo vào database thấy các bảng đã được tạo:
+<img width="1919" height="905" alt="image" src="https://github.com/user-attachments/assets/eaf01282-01cd-48cd-8695-ee09828638b1" />
 
 ---
-
 # 👤 Tạo tài khoản quản trị
 
-## 🔟 Tạo Superuser
+## 🔟 Tạo tài khoản Superuser có quyền thêm, sửa, xóa
 
 ```bash
 sudo docker compose exec web python manage.py createsuperuser
@@ -459,34 +493,119 @@ sudo docker compose exec web python manage.py createsuperuser
 
 Sau khi chạy lệnh này nhập: Username, Email (có thể để trống), Password để sau đó đăng nhập vào hệ thống.
 
-
----
-
-# 🌐 Truy cập hệ thống
-Truy cập vào tranh admin django :`http://192.168.100.2:8005/admin` đăng nhập bằng tài khoản Superuser vừa tạo.
+----
+# Truy cập vào trang quản trị Django 
+`http://192.168.100.2:8005/admin` đăng nhập bằng tài khoản Superuser vừa tạo.
 <img width="1919" height="991" alt="image" src="https://github.com/user-attachments/assets/eb9b27be-735a-4bc7-a628-b92d8e6cbf9e" />
 
 <img width="1910" height="694" alt="image" src="https://github.com/user-attachments/assets/cbfbfd3b-763d-4407-a155-04345f729e83" />
 
+## Nhập dữ liệu vào csdl trên Django
+### Cách tạo dữ liệu trên trang Django Admin
+Trong Django Admin, việc nhập liệu cần tuân thủ thứ tự ưu tiên do các bảng có mối quan hệ ràng buộc khóa ngoại (Foreign Key - FK).
+Thứ tự nhập liệu chuẩn:
+Nhân viên, Khách hàng & Tài sản: Nhập trước vì đây là các bảng độc lập (không chứa FK).
+Hợp đồng: Nhập sau (vì cần tham chiếu đến Khách hàng, Nhân viên và Tài sản).
+Thanh toán: Nhập cuối cùng (vì cần tham chiếu đến ID của Hợp đồng).
+
+#### Thêm dữ liệu vào bảng khách hàng
+- Truy cập vào mục Khách hàng -> Thêm vào
+- Nhập thông tin cá nhân -> Save, sau đó Django sẽ tự động cấp ID duy nhất cho khách hàng 
+<img width="1913" height="783" alt="image" src="https://github.com/user-attachments/assets/319e4ede-fe09-4e59-8ec2-fc2a08611f4d" />
+
+<img width="1919" height="805" alt="image" src="https://github.com/user-attachments/assets/f42f6b1f-2414-4aa0-a2d7-286e603f0c8e" />
+
+#### Thêm dữ liệu vào bảng tài sản:
+- Truy cập mục Tài sản -> Thêm vào
+- Nhập tên tài sản -> Lưu
+<img width="1616" height="627" alt="image" src="https://github.com/user-attachments/assets/2fe322f3-99e4-4f1a-beab-f51fce6d2913" />
+
+#### Thêm dữ liệu vào bảng Gói lãi suất
+- Truy cập mục Gói lãi suất -> Thêm vào
+- Nhập thông tin gói lãi suất -> Lưu
+<img width="1497" height="668" alt="image" src="https://github.com/user-attachments/assets/0abbcac6-3424-4302-a400-5b4e1700b4e4" />
+
+#### Thêm dữ liệu vào bảng Hợp đồng
+- Truy cập mục Hợp đồng -> Thêm vào
+- Nhập thông tin hợp  -> Lưu
+<img width="1919" height="912" alt="image" src="https://github.com/user-attachments/assets/908d2235-1a92-4d09-90d6-eb452972e80a" />
+
+
+## Kiểm tra dữ liệu đã nhập
+Sau khi nhập dữ liệu trên giao diện Admin của Django, truy cập vào `192.168.100.2:8089` để kiểm tra dữ liệu vừa nhập
+<img width="1577" height="811" alt="image" src="https://github.com/user-attachments/assets/a80dbd52-e063-4270-81ce-3e3b5a23940b" />
+
 
 
 ---
 
-## phpMyAdmin
+# 🌐 Truy cập hệ thống
 
-```text
-http://<IP_Server>:8088
+## Truy cập vào trang chủ liệt kê các con nợ
+`http://192.168.100.2:8005/` Trang này xem được mọi thông tin của các con nợ, trạng thái,...
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/4256efa7-66aa-4072-8795-1d7a7df77634" />
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/9ed24ada-6170-4bb7-8526-3d4a8021d09a" />
+
+---
+
+# THÊM SERVICE CLOUDEFLARE ĐỂ PUBLIC WEBSITE
+Mở file: 
+```
+docker-compose.yml
 ```
 
-### Thông tin đăng nhập
+Thêm đoạn sau vào cuối file: 
+```
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: camdo_cloudflared
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TOKEN} # điền token cloudflare của mình
+    restart: unless-stopped
+    depends_on:
+      - django
+    networks:
+      - camdo_net
+```
 
-| Thuộc tính | Giá trị |
-|---|---|
-| Server | db |
-| Username | root |
-| Password | rootpassword |
+## Lấy Tunnel Token trên Cloudflare
+### Đăng nhập vào Claudflare
+Chọn `Zero Truse -> Networks -> Tunnels`
+
+### Tạo tunnels
+Chọn 
+```
+Create a Tunnel
+```
+
+Đặt tên 
+```
+camdo-django
+```
+
+### Chọn Docker
+Cloudeflare sẽ hiển thị lệnh:
+```
+docker run cloudflare/cloudflared:latest tunnel --no-autoupdate run --token xxxxx
+```
+Coppy phần token xxxxx, đây chính là Token của claudflare
+<img width="1910" height="945" alt="image" src="https://github.com/user-attachments/assets/94511154-7a86-4083-ae70-79952ffd9f9a" />
+
+### Build và chạy lại toàn bộ hệ thống
+```
+docker compose up -d --build
+```
 
 ---
+
+## Tạo sub-domain public
+Trên Cloudflare sau khi coppy token chọn continue -> Đặt tên Subdomain -> Service URL `http://camdo:`http://web:8000` -> Save
+
+# KẾT QUẢ DEMO
+<img width="1914" height="1028" alt="image" src="https://github.com/user-attachments/assets/01c40dd5-4c6f-4339-a523-0672bc29d2e1" />
+<img width="1910" height="970" alt="image" src="https://github.com/user-attachments/assets/9cbd31ed-a861-4043-9d0a-6fee21208927" />
+
+
 
 # ✅ Tính năng hiện có
 
@@ -496,7 +615,6 @@ http://<IP_Server>:8088
 - Quản lý gói lãi suất
 - Theo dõi lịch sử thanh toán
 - Tìm kiếm dữ liệu nhanh
-- Bộ lọc dữ liệu trực quan
 - Giao diện quản trị bằng Django Admin
 
 ---
@@ -512,124 +630,3 @@ Dự án có thể mở rộng thêm:
 - In hợp đồng PDF
 - Quản lý nhân viên
 - Hệ thống phân quyền
-
----
-
-# 🖥 Yêu cầu hệ thống
-
-- Ubuntu 22.04+ hoặc Linux tương đương
-- Docker Engine
-- Docker Compose
-
----
-
-
-
------------
-# BÀI LÀM 
-## Cấu trúc thư mục: 
-
-## 1. Tổ chức csdl cho hệ thống quản lý tiệm cầm đồ
-## 2. 
-Tạo thư mục ql_camdo_django: 
-<img width="926" height="332" alt="image" src="https://github.com/user-attachments/assets/70a06c8d-036d-4eb7-ae9c-db43d52e6e02" />
-
-Tạo file requirements.txt, lệnh: `sudo nano requirements.txt`
-Gán nội dung sau vào file và lưu lại:
-```
-Django
-mysqlclient
-```
-<img width="704" height="168" alt="image" src="https://github.com/user-attachments/assets/21194117-5470-4907-b822-8c0542ff72ae" />
-
-Tạo file Dockerfile và paste đoạn mã sau vào file: 
-```
-# Sử dụng image Python phiên bản nhẹ
-FROM python:3.10-slim
-
-# Đặt thư mục làm việc bên trong container là /app
-WORKDIR /app
-
-# Cài đặt các gói thư viện hệ thống cần thiết của Ubuntu để có thể build thư viện mysqlclient
-RUN apt-get update && apt-get install -y \
-    gcc \
-    pkg-config \
-    default-libmysqlclient-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy file requirements.txt từ máy thật vào container
-COPY requirements.txt /app/
-
-# Cài đặt các thư viện Python
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Mặc định, project Django sẽ chạy ở cổng 8000
-EXPOSE 8000
-```
-<img width="1031" height="576" alt="image" src="https://github.com/user-attachments/assets/ce06fb6c-93b4-4402-b0d7-9fa25568d3b4" />
-
-Tạo file docker-compose.yml
-
-<img width="665" height="92" alt="image" src="https://github.com/user-attachments/assets/805e7df0-94fd-4a6a-a6ac-d70dd966189e" />
-
-Khởi tạo project django
-Lệnh: `sudo docker compose run --rm web django-admin startproject core .` Sau khi chạy lệnh này sẽ tạo ra file manage.py và thư mục core
-<img width="1752" height="892" alt="image" src="https://github.com/user-attachments/assets/091e3a73-d1fd-4efa-9a20-ad9b0b69b531" />
-
-<img width="692" height="69" alt="image" src="https://github.com/user-attachments/assets/8f26711d-c2ed-4bb4-8218-4f428fc3119d" />
-
-Cấu hình Django và kết nối với Mariadb `sudo nano core/settings.py`
-Cấu hình file setting đoạn database như sau: 
-```
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'camdo_db',
-        'USER': 'user_camdo',
-        'PASSWORD': 'password123',
-        'HOST': 'db',   # Tên service db trong docker-compose.yml
-        'PORT': '3306',
-    }
-}
-```
-
-Khởi động hệ thống Chạy `sudo docker compose up -d`
-<img width="622" height="124" alt="image" src="https://github.com/user-attachments/assets/8d97ecfb-400c-4046-b880-f34328c79a76" />
-
-Triển khai csdl bằng django
-mở file camdo/models.py 
-Tạo db trong mariadb bằng lệnh migrate:
-`sudo docker compose exec web python manage.py migrate`
-
-<img width="1060" height="214" alt="image" src="https://github.com/user-attachments/assets/385fc415-a0fe-423b-aeab-1aab7ffa1986" />
-
-<img width="1102" height="330" alt="image" src="https://github.com/user-attachments/assets/a3dd7a85-907a-4570-8362-8ee11a64a51f" />
-Tạo tài khoản admin django:
-`sudo docker compose exec web python manage.py createsuperuser`
-<img width="1042" height="207" alt="image" src="https://github.com/user-attachments/assets/528d5088-5afd-44ca-ae2b-a3ef708d70c9" />
-
-
-<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/719cfc1c-accf-4c76-967e-3ffb7e976b8c" />
-
-<img width="1915" height="1078" alt="image" src="https://github.com/user-attachments/assets/2217bc9d-2688-4f2c-8b77-28be2d7d8d17" />
-
-<img width="1917" height="1061" alt="image" src="https://github.com/user-attachments/assets/a171d6c3-df91-4222-8ae9-10abefb9b914" />
-
-Thêm dữ liệu vào bảng trên Django: 
-<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/ea4f587b-3a22-4981-9a4e-ff7c43132817" />
-
-
-Sau khi thêm kiểm tra trên giao diện web phpMyadmin: 
-<img width="1029" height="209" alt="image" src="https://github.com/user-attachments/assets/291d1707-6bba-43a7-9add-6c7c94c57a21" />
-
-Giao diện web: 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/db5f4514-6843-4d21-b1e8-9ba2087c9f28" />
-
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/3634d1f7-b70b-4ab7-b060-a13d6d78903a" />
-
-Truy cập bằng tên miền:
-<img width="1919" height="1077" alt="image" src="https://github.com/user-attachments/assets/80d31787-7d73-45ab-afdb-cc8a7516c5ae" />
-
-<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/abb15737-0d0b-4780-8c1a-4715e012d3ae" />
-
-
